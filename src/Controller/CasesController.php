@@ -36,8 +36,54 @@ class CasesController extends AbstractController
             //TODO: FETCH DATA FROM SERVICE
             // $this->getParameter("service_url");
 
-            $patient->setSingleHousehold(false);
-            $patient->setPreconditions(["> 60 Jahre", "Diabetes"]);
+            $caseData = json_decode(file_get_contents($this->getParameter("service_url") . "/api/people/" . $patient->getUniqueId()), true);
+
+            if($caseData) {
+                $singleHousehold = false;
+                $preconditions = [];
+
+                foreach($caseData["initialQuestionnaireAnswers"] as $answer) {
+                    if($answer["question"] == "Leben sie mit anderen Menschen zusammen im Haushalt?") {
+                        if($answer["answer"] == "Ja") {
+                            $singleHousehold = true;
+                        }
+                    }
+                    if($answer["question"] == "Wie alt sind sie?") {
+                        switch($answer["answer"]) {
+                            case "60-80":
+                            case "80>":
+                                $preconditions[] = "Alter " . $answer["answer"];
+                                break;
+                        }
+                    }
+                    if($answer["question"] == "Rauchen Sie?") {
+                        switch($answer["answer"]) {
+                            case "Ja":
+                                $preconditions[] = "Raucher";
+                                break;
+                        }
+                    }
+                    if($answer["question"] == "Sind sie Schwanger?") {
+                        switch($answer["answer"]) {
+                            case "Ja":
+                                $preconditions[] = "Schwanger";
+                                break;
+                        }
+                    }
+                    if($answer["question"] == "Sind sie innerhalb der letzten 4 Wochen verreist?") {
+                        switch($answer["answer"]) {
+                            case "Ja":
+                                $preconditions[] = "Reisender";
+                                break;
+                        }
+                    }
+
+                }
+            }
+
+
+            $patient->setSingleHousehold($singleHousehold);
+            $patient->setPreconditions($preconditions);
 
             $patient->setUniqueId(str_replace(["-", "_"], ["", ""], $patient->getUniqueId()));
 

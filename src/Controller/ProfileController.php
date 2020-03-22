@@ -57,6 +57,7 @@ final class ProfileController
         return new Response($twig->render('user/profile.html.twig', [
             'username_form' => $usernameForm->createView(),
             'password_form' => $passwordForm->createView(),
+            'menu_active' => 'profile'
         ]));
     }
 }

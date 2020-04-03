@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {% block header %}
+            <ul>
+                {% if app.user %}
+                    <li>{{ 'user.logged_in_as'|trans({ '%username%': msgphp_user.current.email })|raw }}</li>
+                    <li><a href="{{ path('profile') }}">{{ 'action.view_profile'|trans }}</a></li>
+                    <li><a href="{{ path('logout') }}">{{ 'action.logout'|trans }}</a></li>
+                {% else %}
+                    <li><a href="{{ path('login') }}">{{ 'action.login'|trans }}</a></li>
+                    <li><a href="{{ path('register') }}">{{ 'action.register'|trans }}</a></li>
+                {% endif %}
+            </ul>
+        {% endblock %}
+        {% block body %}
+            {% if app.request.hasPreviousSession %}
+                <ul>
+                    {% for type, messages in app.flashes %}
+                        {% for message in messages %}
+                            <li>[{{ type }}] {{ message|trans }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% block login_box %}{% endblock %}
+        {% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

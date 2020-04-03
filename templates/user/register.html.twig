@@ -1,0 +1,15 @@
+{% extends '@AdminLTE/layout/security-layout.html.twig' %}
+
+{% block login_box %}
+    <h1>{{ 'title.register'|trans }} </h1>
+
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.password) }}
+
+        <div>
+            <input type="submit" value="{{ 'action.register'|trans }}" />
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

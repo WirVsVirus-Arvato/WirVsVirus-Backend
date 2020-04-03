@@ -1,0 +1,15 @@
+#docker-compose build
+#docker-compose up -d
+#docker-compose restart [service]
+version: "2"
+services:
+  opendms:
+    build: .
+    volumes:
+      - .:/var/www/html/
+    environment:
+      - DATABASE_URL=mysql://symfony:symfony@192.168.178.78:3306/corona?serverVersion=5.7
+      - SERVICE_URL=http://service.qh.jens-koehler.net
+      - APP_ENV=dev
+    ports:
+      - "8080:8080"

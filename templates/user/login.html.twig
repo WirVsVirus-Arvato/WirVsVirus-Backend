@@ -1,0 +1,25 @@
+{% extends '@AdminLTE/layout/security-layout.html.twig' %}
+
+{% block logo_login %}Quarantänehelfer{% endblock %}
+{% block login_box_msg %}Melden Sie sich an{% endblock %}
+
+{% block login_form %}
+
+    {# <h1>{{ 'title.login'|trans }}</h1>#}
+
+    {% if error %}
+        <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+    {% endif %}
+
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.password) }}
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block" value="{{ 'action.login'|trans }}">{{ 'Sign In'|trans({}, 'AdminLTEBundle') }}</button>
+            <p class="text-center"><a href="{{ url('forgot_password') }}">{{ 'action.forgot_password'|trans }}</a></p>
+        </div>
+    {{ form_end(form) }}
+    {% block login_social_auth %}{% endblock %}
+{% endblock %}
